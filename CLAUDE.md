@@ -12,18 +12,33 @@ https://github.com/Ldev80/beatles-photo-map
 ---
 
 ## Current state
-- `index.html` — full application. Firebase Firestore connected via Firebase JS SDK v10 (ES module). CSS is still inline (not yet refactored to `styles.css`).
+- `index.html` — full application. Firebase Firestore connected via Firebase JS SDK v10 (ES module). CSS is inline (not yet refactored to `styles.css`).
 - `photos.json` — 15-event placeholder, kept as in-browser fallback if Firestore is empty or unreachable.
 - `events-1962.json` — 421 events scraped from beatlesbible.com/1962, used as the source for the Firestore upload.
-- `scripts/upload-events.mjs` — one-off Node 18+ script that geocodes and uploads all 421 events to Firestore. Run once with `node scripts/upload-events.mjs`.
-- Firestore is set up (Standard edition, europe-west2). Rules are currently in test mode (open read/write for 30 days). **Lock writes down after the upload is confirmed working.**
+- `scripts/upload-events.mjs` — one-off script that geocodes and uploads all 421 events to Firestore. Already run — do not re-run unless rebuilding from scratch.
+- `scripts/attach-photos.mjs` — attaches images from `images/` to their Firestore events via the `photos` subcollection. Already run. Re-run only when adding new photo groups.
+- `fonts/` — Futura Std font files (Light, Medium, Bold, Heavy, HeavyOblique) as OTF. Loaded via `@font-face` in `index.html`.
+- `images/` — locally curated photos, served via GitHub Pages. Filename convention: `YYYYMMDD_VenueName_City_NN.ext`. `XX` means the value is not yet known.
+
+### Firestore status
+- **Events collection**: populated with 421 events for 1962.
+- **Photos subcollection**: 111 photos attached across events. 4 new photo-session events were created (not in Beatles Bible):
+  - `1962-03-17` — Joan McEvoy's Home, Wandsworth Rd, Huyton (engagement party after St Patrick's Night Rock Gala)
+  - `1962-09-04` — Speke Airport, Liverpool (morning departure for London)
+  - `1962-09-10` — Rushworths Music House, Whitechapel/Richmond St, Liverpool *(note: image filenames say 0908 but source confirms 10th)*
+  - `1962-10-21` — 20 Forthlin Road, Liverpool (photos by Mike McCartney)
+- **Security rules**: `read: true, write: false`. **Re-open writes before running any upload scripts**, then lock back down afterwards.
+
+### Unresolved image questions
+- `19620324_TheCasbah_WestDerby_*` (8 images) — no Casbah event exists on March 24th in the database (only Heswall Jazz Club). Needs investigation before attaching.
+- `19620607_TheCavernClub_Liverpool.jpg` — no event in the database for June 7th. Needs investigation.
 
 ---
 
 ## Architecture decisions
 
 ### Data source — Firebase Firestore
-Firestore is the live data source. `index.html` fetches from the `events` collection on load. Falls back to hardcoded placeholder data if Firestore returns nothing.
+Firestore is the live data source. `index.html` fetches from the `events` collection on load, and uses a `collectionGroup('photos')` query to identify which events have photos (for the camera icon in the list). Falls back to hardcoded placeholder data if Firestore returns nothing.
 
 ### Data model — two layers
 
@@ -39,7 +54,7 @@ Firestore is the live data source. `index.html` fetches from the `events` collec
 - `title_bb` — string, original Beatles Bible title, kept for reference
 
 **Photos subcollection** (within each event document)
-- `img` — string, direct URL to image file
+- `img` — string, direct URL to image file (GitHub Pages URL)
 - `caption` — string, optional
 - `credit` — string, photographer or source name, optional
 - `source` — string, URL to original post or page where image was found, optional
@@ -63,7 +78,7 @@ Only store what is needed to place an event in time and space, and to display it
 For future years, use the same browser console scraping approach on `beatlesbible.com/YYYY`.
 
 ### Images — manual curation
-The owner is gathering images manually. Filenames will follow the convention `YYYYMMDD_Location`. Images will be attached to events manually (via Firebase Console or an add-photo UI to be built). Auto-matching by filename date/location is a future option.
+The owner gathers images manually. Filename convention: `YYYYMMDD_VenueName_City_NN.ext`. `XX` in any segment means the value is not yet known. Images are committed to `images/` and served via GitHub Pages. Run `scripts/attach-photos.mjs` to attach a new batch to Firestore (requires write rules to be open).
 
 ### Photo matching — Beatles Archive and similar
 Accounts like `beatlesarchive.bsky.app` on Bluesky post dated photographs with descriptions containing venue and location information. The Bluesky API is public and can be queried to find candidate photo matches for existing events. Matches should be flagged for human review before being attached — do not auto-attach.
@@ -84,38 +99,50 @@ Solo curation by the owner at this stage. No public contribution interface neede
 - Vanilla HTML/CSS/JS — no framework
 - Leaflet.js for the map (via unpkg CDN)
 - Firebase JS SDK v10 (ES modules, CDN) for Firestore
-- Google Fonts: Playfair Display (headings), IBM Plex Mono (dates/labels), IBM Plex Sans (body)
+- Fonts: Futura Std (local OTF via `@font-face`), EB Garamond (Google Fonts)
 
-### CSS — pending refactor
-CSS is still inline in `index.html`. Needs splitting into `styles.css` with all colours and typography as CSS custom properties. Owner has a partial design system to apply — wait for that before refactoring.
+### Design system
+Design sourced from Figma. CSS is inline in `index.html` using CSS custom properties.
 
-Current CSS variables:
 ```css
 :root {
-  --ink: #1a1612;
-  --cream: #F7F3EC;
-  --amber: #b45309;
-  --amber-light: #fef3c7;
-  --amber-border: #fcd34d;
-  --border: #e2ddd6;
-  --muted: #6b6560;
+  --ink:     #1d1d1d;
+  --bg:      #c2d3e3;
   --surface: #ffffff;
-  --bg: #f0ebe2;
+  --border:  rgba(29,29,29,0.14);
+  --muted:   rgba(29,29,29,0.45);
+
+  --font-ui:   'Futura', 'Jost', sans-serif;
+  --font-body: 'EB Garamond', serif;
 }
 ```
+
+**Six text styles in use:**
+1. Topbar title — Futura 500, 12px, tracking 0.5em, uppercase
+2. Date labels / badges / UI chrome — Futura 500, 9–10px, tracking 0.3–0.5em, uppercase
+3. Entry / panel title — Futura 700, 13–16px, tracking 0.04em
+4. Location / sublabel — Futura 300, 11–12px, tracking 0.04em
+5. Description body — EB Garamond 400, 15px, tracking 0.03em
+6. Stacked list date (day / month) — Futura 500, 10px, tracking 0.45em, uppercase
 
 ### Design principles
 - Map is the most prominent element
 - Timeline is prominent and allows navigation by time period
-- Panel shows photo, date, location, short description, source link
+- Panel shows photo (with prev/next if multiple), date, location, short description, source link
+- List entries show a camera icon (amber) on events that have photos
 - Tooltips appear on map marker hover showing event title
 - Edit form allows correction of any field
 - Keep the UI minimal — show only what is necessary
 
+### Photo display
+- Photos load lazily when an event is selected
+- Multiple photos per event: prev/next overlay buttons + `1 / N` counter
+- Camera icon shown in list for events with photos (determined via `collectionGroup('photos')` query at startup)
+
 ### Map
 - Leaflet with CartoDB light tiles
 - Marker clustering needed for scale (Leaflet.markercluster plugin) — not yet implemented
-- Active marker is darker/larger than inactive ones
+- Active marker is larger/darker than inactive ones
 - Map flies smoothly to selected event location
 
 ### Timeline
@@ -147,7 +174,7 @@ Owner wants a "journey" feel — stepping through events day by day. Key challen
 - Free Firebase account (Spark plan), Standard edition, europe-west2
 - Project ID: `beatles-photo-map`
 - API key is visible in `index.html` — acceptable as long as Firestore security rules are correctly configured
-- Security rules: public read, no public write. Currently in test mode — lock down writes after upload is confirmed.
+- Security rules: **public read, no public write** (current). Re-open writes temporarily when running upload scripts.
 
 ---
 
@@ -160,11 +187,9 @@ Owner wants a "journey" feel — stepping through events day by day. Key challen
 ---
 
 ## Next steps
-1. Run `node scripts/upload-events.mjs` to populate Firestore with 421 events
-2. Lock Firestore write rules down after upload
-3. Owner gathers images (YYYYMMDD_Location filename convention)
-4. Build image attachment workflow (add photo to event's `photos` subcollection)
-5. Apply owner's design system — refactor CSS to `styles.css` at that point
-6. Implement journey navigation (prev/next with location-aware map movement)
-7. Add marker clustering (Leaflet.markercluster)
-8. Make timeline range dynamic based on loaded data
+1. Resolve the two unattached image groups (Casbah March 24, Cavern Club June 7)
+2. Continue adding images — commit to `images/`, then run `scripts/attach-photos.mjs`
+3. Implement journey navigation (prev/next with location-aware map movement)
+4. Add marker clustering (Leaflet.markercluster)
+5. Make timeline range dynamic based on loaded data
+6. Expand to other years once 1962 is proven
