@@ -22,15 +22,18 @@ https://github.com/Ldev80/beatles-photo-map
 
 ### Firestore status
 - **Events collection**: populated with 421 events for 1962.
-- **Photos subcollection**: 111 photos attached across events. 4 new photo-session events were created (not in Beatles Bible):
+- **Photos subcollection**: 7 new photo-session events created (not in Beatles Bible):
   - `1962-03-17` — Joan McEvoy's Home, Wandsworth Rd, Huyton (engagement party after St Patrick's Night Rock Gala)
+  - `1962-05-30` — Astrid Kirchherr's Studio, Eimsbütteler Straße 45a, Altona, Hamburg (studio loft session)
+  - `1962-06-02` — Hamburg Airport (departure at end of first Star-Club residency)
   - `1962-09-04` — Speke Airport, Liverpool (morning departure for London)
   - `1962-09-10` — Rushworths Music House, Whitechapel/Richmond St, Liverpool *(note: image filenames say 0908 but source confirms 10th)*
+  - `1962-09-29` — Peter Kaye Studio 9, 174 Park Road, Liverpool 8 (professional photoshoot)
   - `1962-10-21` — 20 Forthlin Road, Liverpool (photos by Mike McCartney)
 - **Security rules**: `read: true, write: false`. **Re-open writes before running any upload scripts**, then lock back down afterwards.
 
 ### Unresolved image questions
-- `19620324_TheCasbah_WestDerby_*` (8 images) — no Casbah event exists on March 24th in the database (only Heswall Jazz Club). Needs investigation before attaching.
+- `19620325_TheCasbah_WestDerby_*` (8 images) — files were originally dated March 24 but renamed to March 25. `1962-03-25` Casbah Club event confirmed in database. Ready to attach.
 - `19620607_TheCavernClub_Liverpool.jpg` — no event in the database for June 7th. Needs investigation.
 
 ---

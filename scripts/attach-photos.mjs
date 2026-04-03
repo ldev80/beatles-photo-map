@@ -1,9 +1,12 @@
 // attach-photos.mjs
 //
-// Step 1 — Creates four new photo-session events in Firestore:
+// Step 1 — Creates seven new photo-session events in Firestore:
 //   1962-03-17  Joan McEvoy's Home, Huyton
+//   1962-05-30  Astrid Kirchherr's Studio, Altona, Hamburg
+//   1962-06-02  Hamburg Airport (departure)
 //   1962-09-04  Speke Airport, Liverpool
 //   1962-09-10  Rushworths Music House, Liverpool  ← source URL confirms 10th, not 8th
+//   1962-09-29  Peter Kaye Studio 9, Park Road, Liverpool
 //   1962-10-21  20 Forthlin Road, Liverpool
 //
 // Step 2 — Attaches all well-labelled images to their matching Firestore events
@@ -114,6 +117,32 @@ const GROUPS = [
 
   {
     newEvent: {
+      date:     '1962-05-30',
+      venue:    "Astrid Kirchherr's Studio",
+      city:     'Hamburg',
+      lat:      53.5680,
+      lng:      9.9485,
+      desc:     "These photos were taken in Astrid's studio loft shortly after The Beatles arrived in Hamburg.",
+      source:   '',
+    },
+    images: imgs('19620530_AstridKircherrsHouse_Hamburg'),
+  },
+
+  {
+    newEvent: {
+      date:     '1962-06-02',
+      venue:    'Hamburg Airport',
+      city:     'Hamburg',
+      lat:      53.6304,
+      lng:      9.9882,
+      desc:     'The Beatles depart Hamburg Airport at the end of their first Star-Club residency.',
+      source:   '',
+    },
+    images: imgs('19620602_HamburgAirport_Hamburg'),
+  },
+
+  {
+    newEvent: {
       date:     '1962-03-17',
       venue:    "Joan McEvoy's Home",
       city:     'Huyton',
@@ -136,6 +165,19 @@ const GROUPS = [
       source:   'https://www.beatlesbible.com/1962/09/04/recording-how-do-you-do-it-love-me-do/',
     },
     images: imgs('19620904_SpekeAirport_Liverpool'),
+  },
+
+  {
+    newEvent: {
+      date:     '1962-09-29',
+      venue:    'Peter Kaye Studio 9',
+      city:     'Liverpool',
+      lat:      53.3877,
+      lng:      -2.9712,
+      desc:     'Professional photo session at Peter Kaye\'s Studio 9, 174 Park Road, Liverpool 8.',
+      source:   '',
+    },
+    images: imgs('19620929_PeterKayeStudio_Liverpool'),
   },
 
   {
@@ -168,9 +210,21 @@ const GROUPS = [
   // ── Existing events ───────────────────────────────────────────────────────
 
   {
+    date: '1962-03-25',
+    venueHint: 'Casbah',
+    images: imgs('19620325_TheCasbah_WestDerby'),
+  },
+
+  {
+    date: '1962-03-02',
+    venueHint: 'Tower Ballroom',
+    images: imgs('19620302_TowerBallroom_NewBrighton'),
+  },
+
+  {
     date: '1962-03-07',
     venueHint: 'BBC',
-    images: imgs('19620307_BBC'),
+    images: imgs('19620307_BroadcastingHouse_Manchester'),
   },
 
   {
@@ -201,6 +255,12 @@ const GROUPS = [
     date: '1962-07-06',
     venueHint: 'Royal Iris',
     images: imgs('19620706_RoyalIris_RiverMersey'),
+  },
+
+  {
+    date: '1962-07-07',
+    venueHint: 'Hulme Hall',
+    images: imgs('19620707_HulmeHall_PortSunlight'),
   },
 
   {
@@ -280,6 +340,12 @@ const GROUPS = [
       ...imgs('19621215_TheMajesticBallroom_Birkenhead'),
       ...imgs('19621215_TheMajesticBallroom_XX'),
     ],
+  },
+
+  {
+    date: '1962-12-04',
+    venueHint: 'Wembley',
+    images: imgs('19621204_WembleyStudios_London'),
   },
 
   {

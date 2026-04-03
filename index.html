@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Beatles — Through the Lens</title>
+<title>Evolver '62</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -271,25 +271,6 @@
 
   #meta .m-src a:hover { opacity: 1; }
 
-  #edit-btn {
-    margin-top: 10px;
-    font-family: var(--font-ui);
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    padding: 5px 11px;
-    cursor: pointer;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    color: var(--muted);
-    display: none;
-    transition: border-color 0.15s, color 0.15s;
-  }
-
-  #edit-btn:hover { border-color: var(--ink); color: var(--ink); }
-
   #list-head {
     padding: 10px 16px;
     font-family: var(--font-ui);
@@ -466,120 +447,25 @@
 
   .leaflet-container { font-family: 'IBM Plex Sans', sans-serif; }
 
-  #edit-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #edit-overlay.open { display: flex; }
-
-  #edit-box {
-    background: var(--surface);
-    border-radius: 3px;
-    padding: 24px;
-    width: 460px;
-    max-width: 95vw;
-    border: 1px solid var(--border);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  }
-
-  #edit-box h2 {
-    font-family: var(--font-ui);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .ef { margin-bottom: 12px; }
-
-  .ef label {
-    display: block;
-    font-family: var(--font-ui);
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .ef input, .ef textarea {
-    width: 100%;
-    font-family: var(--font-ui);
-    font-size: 13px;
-    font-weight: 300;
-    padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    background: #f4f6f8;
-    color: var(--ink);
-    transition: border-color 0.15s;
-  }
-
-  .ef input:focus, .ef textarea:focus {
-    outline: none;
-    border-color: var(--ink);
-  }
-
-  .ef textarea { height: 72px; resize: vertical; }
-
-  .ef-row { display: flex; gap: 10px; }
-  .ef-row .ef { flex: 1; }
-
-  .edit-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    margin-top: 16px;
-  }
-
-  .edit-actions button {
-    font-family: var(--font-ui);
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 7px 16px;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  #save-btn { background: var(--ink); color: var(--bg); border: none; }
-  #save-btn:hover { opacity: 0.8; }
-  #cancel-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); }
-  #cancel-btn:hover { border-color: var(--ink); color: var(--ink); }
-
-  #json-export {
-    margin-top: 12px;
-    padding: 10px;
-    background: #f4f6f8;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    font-family: var(--font-ui);
-    font-size: 11px;
-    font-weight: 300;
-    color: var(--muted);
-    display: none;
-  }
-
-  #json-export p { margin-bottom: 6px; color: var(--ink); }
-  #json-export textarea { width: 100%; height: 80px; font-size: 10px; resize: none; }
 </style>
 </head>
 <body>
 
 <div id="shell">
   <div id="topbar">
-    <h1>The Beatles — Through the Lens</h1>
-    <span class="sub">1957–1962</span>
+    <svg viewBox="0 0 80.166 40.893" style="height:22px;width:auto;fill:white;flex-shrink:0" aria-label="The Beatles" role="img">
+      <path d="M79.211998,14.1740007l-1.6620026,3.5700006c-0.5410004-1.4120007-1.7740021-2.0139999-3.5579987-1.9120007c-1.1819992,0.0680008-2.6230011,1.0949993-2.6070023,2.7940006c0.0429993,1.5020008,0.8160019,2.2140007,4.5619965,4.164999c3.439003,1.8010006,4.2190018,3.8400002,4.2190018,5.9360008c0,3.6479988-2.4509964,6.3300018-6.8330002,6.3440018c-3.3600006-0.0139999-5.326004-1.8540001-5.326004-4.0939999c0.0019989-1.7619991,1.0009995-3.1070004,2.6829987-3.5079994c-0.6080017,0.7010002-0.6989975,1.5680008-0.7089996,1.9710007c0.0100021,1.1149998,0.6350021,3.0140018,3.3540039,3.0140018c1.560997,0,2.8000031-1.0289993,2.8000031-2.9529991c-0.012001-2.5470009-1.9459991-3.3419991-3.7229996-4.2460003c-1.1660004-0.5879993-4.4290009-2.3220005-4.4290009-6.3379993c-0.0039978-3.0540009,2.8119965-5.4300003,5.7809982-5.4470005C76.5179977,13.4520006,75.8160019,14.6950006,79.211998,14.1740007z"/>
+      <path d="M58.8069992,16.1860008c-0.0159988-0.8559999-0.25-1.9449997-0.7700005-2.4309998c1.2130013,0,9.4340019,0.0050001,9.4449959,0.0050001l-0.5210037,3.6559992c-0.487999-0.5300007-1.0759964-1.2329998-1.814003-1.2329998c-0.7539978,0.0020008-2.3279991,0-2.3380013,0v5.9729996c0.0099983,0.0119991,1.2110023,0.0119991,1.8459969,0c0.6460037,0.0119991,1.2850037-0.1350002,1.9380035-0.7709999v4.0620003c-0.5469971-0.4330006-1.1880035-0.8279991-1.814003-0.8279991l-1.9690018-0.0020008v7.6009979c0.4899979,0.1529999,3.5619965-0.0209999,4.6760025-1.6609993l-0.6460037,4.0919991h-8.8950005c0.762001-0.637001,0.8479996-1.6459999,0.8610001-2.3979988V16.1860008H58.8069992z"/>
+      <path d="M49.3279991,16.1860008c0.0139999-0.8559999-0.2229996-1.9449997-0.7700005-2.4309998h5.5690002c-0.5299988,0.4849997-0.7369995,1.5749998-0.7369995,2.4309998v15.9710007c0.4790001,0.1689987,3.5489998-0.007,4.6780014-1.6609993l-0.7709999,4.1520004h-8.7999992c0.5239983-0.3180008,0.8450012-1.387001,0.8310013-2.4910011V16.1860008H49.3279991z"/>
+      <path d="M47.8520012,13.7540007l0.6759987,4.1850004c-0.3829994-0.7329998-1.6780014-1.757-2.3689995-1.757l-1.1699982,0.0020008c-0.2789993,0-0.3930016,0.4969997-0.3930016,0.9839993c-0.007,0.8460007,0.1699982,19.4529972,0.2389984,20.6169987c0.0429993,1.1839981,0.6689987,2.6220016,1.1399994,3.1080017h-7.230999c0.4690018-0.4860001,1.0940018-1.927002,1.1389999-3.1080017c0.0690002-1.1640015,0.2410011-19.7709999,0.2410011-20.6170006c0.0060005-0.4869995-0.1139984-0.9869995-0.394001-0.9869995l-1.1699982,0.0020008c-0.6889992,0-1.9780006,0.9680004-2.3689995,1.7539997L36.868,13.7520008h10.9840012V13.7540007z"/>
+      <path d="M29.3260002,13.7540007c0.7520008,0.974,0.8589993,1.585,0.6469994,2.4310007l-3.5690002,16.0639992c-0.1569996,0.6990013-0.5289993,1.8149986-1.1690006,2.3969994h4.8610001c-0.7380009-0.5600014-0.9249992-1.4379997-0.7380009-2.3969994l0.5550003-2.3999996h3.9080009l0.5540009,2.309c0.1469994,0.5960007,0.0040016,2.0680008-0.6469994,2.4920006h5.5390015c-0.493-0.4239998-1.1339989-1.4389992-1.4160004-2.4319992l-3.446003-16.0010014c-0.2099991-0.8500004-0.1020012-1.4879999,0.6459999-2.4630003H29.3260002L29.3260002,13.7540007z M33.3580017,27.5410004h-2.9230003l1.507-6.5550003L33.3580017,27.5410004z"/>
+      <path d="M16.8029995,16.1860008c0.0130005-0.8559999-0.2220001-1.9449997-0.7700005-2.4309998c1.2409992,0,9.460001,0.0050001,9.448,0.0050001l-0.493,3.6559992c-0.493-0.5300007-1.0790005-1.2329998-1.8150005-1.2329998c-0.757,0.0020008-2.3309994,0-2.3390007,0v5.9729996c0.0079994,0.0119991,1.2080002,0.0119991,1.8460007,0c0.6429996,0.0119991,1.2819996-0.1350002,1.9069996-0.7709999v4.0620003c-0.5179996-0.4330006-1.1580009-0.8279991-1.7840004-0.8279991l-1.9689999-0.0020008v7.6009979c0.4890003,0.1529999,3.5599995-0.0209999,4.677-1.6609993l-0.6459999,4.0919991h-8.8929996c0.757-0.637001,0.8430004-1.6459999,0.8309994-2.3979988C16.8029976,32.2509995,16.8029976,16.1860008,16.8029995,16.1860008z"/>
+      <path d="M9.0489998,0.7390001C12.6589994,0.7240001,15.198,2.5070002,15.198,8.677c0.0039997,3.5959997-1.092,6.4489994-3.3190002,7.632c2.125,1.1350002,4.1680012,3.8169994,4.1539993,8.3389988c0.0139999,7.7639999-3.2159996,10.0029984-7.3239994,10.0029984L0.001,34.6469994c1.0170001-1.1189995,1.4120001-2.0800018,1.4120001-3.4780006L1.4159999,4.0600004C1.4159999,2.684,1.017,1.8170002,0,0.7080001L9.0489998,0.7390001z M6.0320001,13.9390001c0,0.7600002,0.6679997,0.9729996,1.7850003,0.9840002c2.5240002-0.0109997,2.8210001-2.7309999,2.8310003-6.3080006c-0.0100002-4.6199999-1.1929998-5.6380005-2.8929996-5.632C6.7480001,2.977,6.033,3.5339999,6.033,4.1529999C6.0320001,4.8579998,6.033,13.2070007,6.0320001,13.9390001L6.0320001,13.9390001L6.0320001,13.9390001z M8.3699999,31.9410019c2.5460005,0,2.8590002-2.5799999,2.8590002-7.3239994c0.0019999-4.2460003-1.1689997-6.4499989-3.1350002-6.4619999C7.25,18.1670017,6.033,18.3260021,6.033,18.9550018c-0.0009999,0.6520004,0,10.5200005,0,11.3240013c-0.0009999,0.9020004,0.9369998,1.6640015,2.3369999,1.6640015V31.9410019L8.3699999,31.9410019z"/>
+      <path d="M43.6349983,0.954C43.6429977,0.623,43.5309982,0.201,43.2659988,0c0.5960007,0.013,4.512001,0.013,4.5229988,0l-0.2449989,1.447c-0.2420006-0.223-0.5209999-0.49-0.8619995-0.49c-0.3709984-0.003-1.1209984,0-1.1069984,0v2.3050001c-0.0139999,0.007,0.5590019,0.007,0.8610001,0c0.3079987,0.007,0.6119995-0.026,0.9239998-0.277v1.7850003c-0.2599983-0.1789999-0.5649986-0.3800001-0.8610001-0.3699999h-0.9230003v2.8310003c0.2159996,0.0619993,1.6800003-0.0060005,2.2150002-0.6459999l-0.3079987,1.6009998h-4.2480011c0.3670006-0.2469997,0.4080009-0.6630001,0.4000015-0.9540005V0.954H43.6349983z"/>
+      <path d="M40.0359993,8.1859999h2.7369995c-0.2459984-0.1219997-0.3989983-0.5250006-0.3989983-0.9540005V0.954c0-0.331,0.1040001-0.752,0.3699989-0.954h-2.6469994c0.243,0.201,0.3479996,0.623,0.3390007,0.954v2.309h-1.1080017V0.954C39.3139992,0.623,39.4189987,0.201,39.6660004,0H37.019001c0.2599983,0.201,0.3650017,0.623,0.3650017,0.954l0.0040016,6.2780004c0,0.4289999-0.1559982,0.8319998-0.4000015,0.9540005h2.7080002c-0.2299995-0.1219997-0.382-0.5250006-0.3699989-0.9540005V4.3990002h1.1080017v2.8319998C40.4449997,7.6610003,40.2929993,8.0630007,40.0359993,8.1859999z"/>
+      <path d="M33.019001,1.3540001c0-0.186-0.0540009-0.381-0.1850014-0.37h-0.6459999c-0.3240013-0.012-0.7750015,0.369-0.9539986,0.678l0.1549988-1.6619999h5.2299995l0.1539993,1.6619999c-0.1749992-0.289-0.6300011-0.689-0.9539986-0.678h-0.6769981c-0.1409988-0.012-0.1949997,0.184-0.1850014,0.37v5.8780003c-0.012001,0.4119997,0.1090012,0.7709999,0.3380013,0.9540005h-2.6139984c0.1699982-0.1450005,0.3349991-0.4919996,0.3349991-0.9540005L33.019001,1.3540001z"/>
+    </svg>
+    <span class="sub">Evolver '62</span>
     <span class="badge" id="data-badge">loading…</span>
     <span class="spacer"></span>
     <a class="gh-link" href="https://github.com/Ldev80/beatles-photo-map" target="_blank">Edit on GitHub</a>
@@ -601,7 +487,6 @@
         <div class="m-loc" id="m-loc"></div>
         <div class="m-desc" id="m-desc"></div>
         <div class="m-src" id="m-src"></div>
-        <button id="edit-btn">Edit this entry</button>
       </div>
       <div id="list-head">All entries — <span id="count">0</span> events</div>
       <div id="list"></div>
@@ -615,42 +500,17 @@
       <div id="tl-thumb"></div>
     </div>
     <div id="tl-years">
-      <span>1957</span><span>1958</span><span>1959</span><span>1960</span><span>1961</span><span>1962</span>
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
     </div>
     <div id="tl-label"></div>
   </div>
 </div>
 
-<div id="edit-overlay">
-  <div id="edit-box">
-    <h2>Edit photo entry</h2>
-    <div class="ef"><label>Title</label><input id="ef-title"/></div>
-    <div class="ef-row">
-      <div class="ef"><label>Date (YYYY-MM-DD)</label><input id="ef-date" placeholder="e.g. 1960-08-17"/></div>
-      <div class="ef"><label>Location name</label><input id="ef-loc"/></div>
-    </div>
-    <div class="ef-row">
-      <div class="ef"><label>Latitude</label><input id="ef-lat" type="number" step="0.0001"/></div>
-      <div class="ef"><label>Longitude</label><input id="ef-lng" type="number" step="0.0001"/></div>
-    </div>
-    <div class="ef"><label>Image URL</label><input id="ef-img" placeholder="https://..."/></div>
-    <div class="ef"><label>Source URL</label><input id="ef-src" placeholder="https://www.beatlesbible.com/..."/></div>
-    <div class="ef"><label>Description</label><textarea id="ef-desc"></textarea></div>
-    <div class="edit-actions">
-      <button id="cancel-btn">Cancel</button>
-      <button id="save-btn">Save &amp; export JSON</button>
-    </div>
-    <div id="json-export">
-      <p>Copy the JSON below and update your <code>photos.json</code> on GitHub:</p>
-      <textarea id="json-out" readonly></textarea>
-    </div>
-  </div>
-</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getFirestore, collection, collectionGroup, getDocs, doc, updateDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, collection, collectionGroup, getDocs } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // ── Firebase ──────────────────────────────────────────────
 const firebaseConfig = {
@@ -685,11 +545,11 @@ const FALLBACK = [
 let events = [];
 let activeId = null;
 let currentPhotoIndex = 0;
-let map, markers = {}, editingId = null;
+let map, markers = {};
 let usingFirestore = false;
 
 // ── Time helpers ──────────────────────────────────────────
-const minTs = new Date('1957-01-01').getTime();
+const minTs = new Date('1962-01-01').getTime();
 const maxTs = new Date('1962-12-31').getTime();
 
 function toTs(d) { return d ? new Date(d).getTime() : 0; }
@@ -815,7 +675,6 @@ async function selectEvent(id) {
   document.getElementById('m-desc').textContent = p.desc || '';
   const srcEl = document.getElementById('m-src');
   srcEl.innerHTML = p.source ? `<a href="${p.source}" target="_blank">View source</a>` : '';
-  document.getElementById('edit-btn').style.display = 'inline-block';
 
   const ts = toTs(p.date);
   const pct = tsPct(ts);
@@ -920,74 +779,6 @@ function render() {
   renderMarkers();
   renderPips();
 }
-
-// ── Edit form ─────────────────────────────────────────────
-function openEdit(id) {
-  editingId = id;
-  const p = events.find(x => x.id === id);
-  if (!p) return;
-  document.getElementById('ef-title').value = p.venue || '';
-  document.getElementById('ef-date').value = p.date || '';
-  document.getElementById('ef-loc').value = p.city || '';
-  document.getElementById('ef-lat').value = p.lat || '';
-  document.getElementById('ef-lng').value = p.lng || '';
-  document.getElementById('ef-img').value = (p._photos && p._photos[0]) ? p._photos[0].img : '';
-  document.getElementById('ef-src').value = p.source || '';
-  document.getElementById('ef-desc').value = p.desc || '';
-  document.getElementById('json-export').style.display = 'none';
-  document.getElementById('edit-overlay').classList.add('open');
-}
-
-document.getElementById('edit-btn').addEventListener('click', () => openEdit(activeId));
-document.getElementById('cancel-btn').addEventListener('click', () => {
-  document.getElementById('edit-overlay').classList.remove('open');
-});
-document.getElementById('edit-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('edit-overlay'))
-    document.getElementById('edit-overlay').classList.remove('open');
-});
-
-document.getElementById('save-btn').addEventListener('click', async () => {
-  const p = events.find(x => x.id === editingId);
-  if (!p) return;
-
-  const updates = {
-    venue: document.getElementById('ef-title').value,
-    date: document.getElementById('ef-date').value,
-    city: document.getElementById('ef-loc').value,
-    lat: parseFloat(document.getElementById('ef-lat').value) || p.lat,
-    lng: parseFloat(document.getElementById('ef-lng').value) || p.lng,
-    source: document.getElementById('ef-src').value,
-    desc: document.getElementById('ef-desc').value
-  };
-
-  Object.assign(p, updates);
-
-  const saveBtn = document.getElementById('save-btn');
-  saveBtn.textContent = 'Saving…';
-  saveBtn.disabled = true;
-
-  if (p._fromFirestore) {
-    try {
-      await updateDoc(doc(db, 'events', p.id), updates);
-      document.getElementById('json-export').style.display = 'none';
-      document.getElementById('edit-overlay').classList.remove('open');
-    } catch (err) {
-      alert('Firestore save failed: ' + err.message);
-    }
-  } else {
-    // Fallback data — show JSON export
-    const exportEl = document.getElementById('json-export');
-    document.getElementById('json-out').value = JSON.stringify(events, null, 2);
-    exportEl.style.display = 'block';
-  }
-
-  saveBtn.textContent = 'Save';
-  saveBtn.disabled = false;
-
-  render();
-  selectEvent(editingId);
-});
 
 // ── Boot ──────────────────────────────────────────────────
 initMap();
