@@ -281,6 +281,31 @@
     color: var(--muted);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  #photo-filter-btn {
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+  }
+
+  #photo-filter-btn.active {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
   }
 
   #list {
@@ -488,7 +513,10 @@
         <div class="m-desc" id="m-desc"></div>
         <div class="m-src" id="m-src"></div>
       </div>
-      <div id="list-head">All entries — <span id="count">0</span> events</div>
+      <div id="list-head">
+        <span>All entries — <span id="count">0</span> events</span>
+        <button id="photo-filter-btn">Photos only</button>
+      </div>
       <div id="list"></div>
     </div>
   </div>
@@ -545,6 +573,7 @@ const FALLBACK = [
 let events = [];
 let activeId = null;
 let currentPhotoIndex = 0;
+let photosOnly = false;
 let map, markers = {};
 let usingFirestore = false;
 
@@ -633,12 +662,25 @@ function docToEvent(snapshot) {
 async function loadFromFirestore() {
   const snap = await getDocs(collection(db, 'events'));
   if (snap.empty) return null;
-  return snap.docs.map(docToEvent);
+  const seen = new Set();
+  return snap.docs.map(docToEvent).filter(e => {
+    const key = `${e.date}|${e.venue}|${e.city}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 async function loadPhotosForEvent(eventId) {
   const snap = await getDocs(collection(db, 'events', eventId, 'photos'));
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const seen = new Set();
+  return snap.docs
+    .map(d => ({ id: d.id, ...d.data() }))
+    .filter(p => {
+      if (!p.img || seen.has(p.img)) return false;
+      seen.add(p.img);
+      return true;
+    });
 }
 
 // One query to find all event IDs that have at least one photo
@@ -738,10 +780,11 @@ document.getElementById('photo-next').addEventListener('click', () => {
 
 // ── Render list & timeline ────────────────────────────────
 function renderList() {
-  const sorted = [...events].sort((a, b) => toTs(a.date) - toTs(b.date));
+  const filtered = events.filter(e => !photosOnly || e._hasPhotos);
+  const sorted = [...filtered].sort((a, b) => toTs(a.date) - toTs(b.date));
   const list = document.getElementById('list');
   list.innerHTML = '';
-  document.getElementById('count').textContent = events.length;
+  document.getElementById('count').textContent = sorted.length;
   sorted.forEach(p => {
     const div = document.createElement('div');
     div.className = 'entry' + (p.id === activeId ? ' active' : '');
@@ -779,6 +822,14 @@ function render() {
   renderMarkers();
   renderPips();
 }
+
+// ── Photo filter toggle ───────────────────────────────────
+document.getElementById('photo-filter-btn').addEventListener('click', () => {
+  photosOnly = !photosOnly;
+  document.getElementById('photo-filter-btn').classList.toggle('active', photosOnly);
+  renderList();
+  renderPips();
+});
 
 // ── Boot ──────────────────────────────────────────────────
 initMap();
