@@ -138,6 +138,46 @@
     line-height: 1.6;
   }
 
+  .photo-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.45);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.15s;
+  }
+
+  .photo-nav:hover { background: rgba(0,0,0,0.7); }
+  #photo-prev { left: 8px; }
+  #photo-next { right: 8px; }
+
+  #photo-counter {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: none;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
   #meta {
     padding: 13px 15px;
     border-bottom: 1px solid var(--border);
@@ -469,7 +509,11 @@
     <div id="map"></div>
     <div id="panel">
       <div id="photo-wrap">
-        <div class="no-img">Select a photo from the list or timeline</div>
+        <div class="no-img" id="photo-placeholder">Select a photo from the list or timeline</div>
+        <img id="photo-img" alt="" style="display:none"/>
+        <button id="photo-prev" class="photo-nav" aria-label="Previous photo">&#8592;</button>
+        <button id="photo-next" class="photo-nav" aria-label="Next photo">&#8594;</button>
+        <div id="photo-counter"></div>
       </div>
       <div id="meta">
         <div class="m-date" id="m-date"></div>
@@ -560,6 +604,7 @@ const FALLBACK = [
 // ── State ─────────────────────────────────────────────────
 let events = [];
 let activeId = null;
+let currentPhotoIndex = 0;
 let map, markers = {}, editingId = null;
 let usingFirestore = false;
 
@@ -664,20 +709,7 @@ async function selectEvent(id) {
     p._photosLoaded = true;
   }
 
-  const firstPhoto = p._photos && p._photos.length > 0 ? p._photos[0] : null;
-  const imgUrl = firstPhoto ? (firstPhoto.img || '') : '';
-
-  const wrap = document.getElementById('photo-wrap');
-  wrap.innerHTML = '';
-  if (imgUrl) {
-    const img = document.createElement('img');
-    img.src = imgUrl;
-    img.alt = eventTitle(p);
-    img.onerror = () => { wrap.innerHTML = '<div class="no-img">Image could not be loaded.</div>'; };
-    wrap.appendChild(img);
-  } else {
-    wrap.innerHTML = '<div class="no-img">No image attached to this event</div>';
-  }
+  showPhoto(p, 0);
 
   document.getElementById('m-date').textContent = formatDate(p.date);
   document.getElementById('m-title').textContent = eventTitle(p);
@@ -698,6 +730,54 @@ async function selectEvent(id) {
   renderMarkers();
   if (p.lat && p.lng) map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 9), { animate: true, duration: 0.8 });
 }
+
+// ── Photo navigation ──────────────────────────────────────
+function showPhoto(p, index) {
+  const photos = p._photos || [];
+  currentPhotoIndex = Math.max(0, Math.min(index, photos.length - 1));
+  const photo = photos[currentPhotoIndex];
+  const imgUrl = photo ? (photo.img || '') : '';
+
+  const photoImg     = document.getElementById('photo-img');
+  const placeholder  = document.getElementById('photo-placeholder');
+  const prevBtn      = document.getElementById('photo-prev');
+  const nextBtn      = document.getElementById('photo-next');
+  const counter      = document.getElementById('photo-counter');
+
+  if (imgUrl) {
+    photoImg.alt = eventTitle(p);
+    photoImg.src = imgUrl;
+    photoImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    photoImg.onerror = () => {
+      photoImg.style.display = 'none';
+      placeholder.textContent = 'Image could not be loaded.';
+      placeholder.style.display = 'flex';
+    };
+  } else {
+    photoImg.style.display = 'none';
+    placeholder.textContent = 'No image attached to this event';
+    placeholder.style.display = 'flex';
+  }
+
+  const multi = photos.length > 1;
+  prevBtn.style.display  = multi ? 'flex' : 'none';
+  nextBtn.style.display  = multi ? 'flex' : 'none';
+  counter.style.display  = multi ? 'block' : 'none';
+  if (multi) counter.textContent = `${currentPhotoIndex + 1} / ${photos.length}`;
+}
+
+document.getElementById('photo-prev').addEventListener('click', () => {
+  const p = events.find(x => x.id === activeId);
+  if (!p || !p._photos || p._photos.length < 2) return;
+  showPhoto(p, (currentPhotoIndex - 1 + p._photos.length) % p._photos.length);
+});
+
+document.getElementById('photo-next').addEventListener('click', () => {
+  const p = events.find(x => x.id === activeId);
+  if (!p || !p._photos || p._photos.length < 2) return;
+  showPhoto(p, (currentPhotoIndex + 1) % p._photos.length);
+});
 
 // ── Render list & timeline ────────────────────────────────
 function renderList() {
