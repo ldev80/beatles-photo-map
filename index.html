@@ -301,6 +301,14 @@
     color: var(--muted);
   }
 
+  .e-camera {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--amber);
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
   #tl-bar {
     border-top: 1px solid var(--border);
     background: var(--surface);
@@ -570,7 +578,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getFirestore, collection, getDocs, doc, updateDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, collection, collectionGroup, getDocs, doc, updateDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // ── Firebase ──────────────────────────────────────────────
 const firebaseConfig = {
@@ -691,6 +699,14 @@ async function loadPhotosForEvent(eventId) {
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
+// One query to find all event IDs that have at least one photo
+async function loadPhotoMembership() {
+  const snap = await getDocs(collectionGroup(db, 'photos'));
+  const ids = new Set();
+  snap.docs.forEach(d => ids.add(d.ref.parent.parent.id));
+  return ids;
+}
+
 // ── Select & display ──────────────────────────────────────
 async function selectEvent(id) {
   activeId = id;
@@ -789,12 +805,14 @@ function renderList() {
     const div = document.createElement('div');
     div.className = 'entry' + (p.id === activeId ? ' active' : '');
     div.dataset.id = p.id;
+    const cameraIcon = `<svg class="e-camera" width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M2 6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-3.382l-1.724-1.724A1 1 0 0 0 12.172 4H7.828a1 1 0 0 0-.707.293L5.382 6H2zm8 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>`;
     div.innerHTML = `
       <div class="e-date">${p.date || '?'}</div>
-      <div>
+      <div style="flex:1;min-width:0">
         <div class="e-title">${eventTitle(p)}</div>
         <div class="e-loc">${eventLocation(p)}</div>
-      </div>`;
+      </div>
+      ${p._hasPhotos ? cameraIcon : ''}`;
     div.addEventListener('click', () => selectEvent(p.id));
     list.appendChild(div);
   });
@@ -902,6 +920,10 @@ try {
     badge.style.background = '#dcfce7';
     badge.style.color = '#166534';
     badge.style.borderColor = '#86efac';
+    try {
+      const photoIds = await loadPhotoMembership();
+      events.forEach(e => { e._hasPhotos = photoIds.has(e.id); });
+    } catch (_) {}
   } else {
     events = FALLBACK.map(p => ({ ...p, _photosLoaded: true, _fromFirestore: false }));
     badge.textContent = 'provisional data';
